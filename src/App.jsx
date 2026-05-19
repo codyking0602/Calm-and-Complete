@@ -39,7 +39,7 @@ const COLORS = {
     progress: "#D9B62E",
     textMuted: "#746550",
   },
-  intel: {
+  rhythm: {
     bg: "#DDE5D8",
     bgGlow1: "rgba(13,91,62,.16)",
     bgGlow2: "rgba(221,168,164,.14)",
