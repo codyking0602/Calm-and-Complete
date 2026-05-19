@@ -914,17 +914,26 @@ export default function LifeScoreboard() {
     0
   );
 
-  const appBg =
-    tab === "today"
-      ? `min-h-screen bg-[${COLORS.today.bg}] bg-[radial-gradient(circle_at_15%_10%,${COLORS.today.bgGlow1},transparent_28%),radial-gradient(circle_at_88%_18%,${COLORS.today.bgGlow2},transparent_30%)] px-4 pb-28 pt-5 text-slate-100`
-      : tab === "history"
-      ? `min-h-screen bg-[${COLORS.history.bg}] bg-[radial-gradient(circle_at_20%_10%,${COLORS.history.bgGlow1},transparent_28%),radial-gradient(circle_at_85%_18%,${COLORS.history.bgGlow2},transparent_30%)] px-4 pb-28 pt-5 text-slate-100`
-      : tab === "insights"
-      ? `min-h-screen bg-[${COLORS.intel.bg}] bg-[radial-gradient(circle_at_18%_10%,${COLORS.intel.bgGlow1},transparent_28%)] px-4 pb-28 pt-5 text-slate-100`
-      : `min-h-screen bg-[${COLORS.home.bg}] bg-[radial-gradient(circle_at_15%_10%,${COLORS.home.bgGlow1},transparent_28%),radial-gradient(circle_at_88%_18%,${COLORS.home.bgGlow2},transparent_30%)] px-4 pb-28 pt-5 text-slate-100`;
+  const currentTheme =
+  tab === "today"
+    ? COLORS.today
+    : tab === "history"
+    ? COLORS.history
+    : tab === "insights"
+    ? COLORS.intel
+    : COLORS.home;
 
   return (
-    <div className={appBg}>
+    <div
+  className="min-h-screen px-4 pb-28 pt-5 text-slate-100"
+  style={{
+    background: `
+      radial-gradient(circle at 15% 10%, ${currentTheme.bgGlow1}, transparent 28%),
+      radial-gradient(circle at 88% 18%, ${currentTheme.bgGlow2}, transparent 30%),
+      ${currentTheme.bg}
+    `,
+  }}
+>
       <XpBurst burst={burst} />
       <TierPopup popup={tierPopup} onClose={() => setTierPopup(null)} />
 
