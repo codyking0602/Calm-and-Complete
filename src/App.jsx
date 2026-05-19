@@ -264,6 +264,17 @@ function getTier(score) {
     return { label: "Overdrive Day", color: "#b8860b", key: "overdrive" };
   }
 
+  if (score.corePercent >= 85) {
+    return { label: "Elite Day", color: "#22c55e", key: "elite" };
+  }
+
+  if (score.corePercent >= 55) {
+    return { label: "Stable Day", color: "#fb923c", key: "stable" };
+  }
+
+  return { label: "Drift Day", color: "#ef4444", key: "drift" };
+}
+
 function getNextMove(day, score) {
   if (score.corePercent >= 55) return "Momentum Stable. Protect Family And Bedtime.";
 
