@@ -53,28 +53,26 @@ const COLORS = {
   },
 };
 
-const CORE_SECTIONS = ["Plan", "Body", "Home", "Projects", "Nutrition", "Family", "Reset"];
+const CORE_SECTIONS = ["Morning", "Midday", "Evening"];
 
 const SECTION_COLORS = {
-  Plan: "#C9721B",
-  Body: "#0D5B3E",
-  Home: "#DDA8A4",
-  Projects: "#D9B62E",
-  Nutrition: "#8AA68A",
-  Family: "#C9721B",
-  Reset: "#7A6A58",
+  Morning: "#C9721B",
+  Midday: "#DDA8A4",
+  Evening: "#0D5B3E",
 };
 
 const CORE_HABITS = [
-  { id: "planToday", label: "Create Today’s Plan", points: 10, group: "Plan" },
-  { id: "movement", label: "Morning Walk / Movement", points: 10, group: "Body" },
-  { id: "completeProject", label: "Complete One Started Project", points: 10, group: "Projects" },
-  { id: "morningReset", label: "Morning Reset Routine", points: 8, group: "Home" },
-  { id: "eatIntentional", label: "Eat Intentionally", points: 8, group: "Nutrition" },
-  { id: "kidConnection", label: "Intentional Kid Connection", points: 8, group: "Family" },
-  { id: "homeReset", label: "15-Minute Home Reset", points: 5, group: "Home" },
-  { id: "eveningReset", label: "Evening Reset / Prep Tomorrow", points: 5, group: "Reset" },
-  { id: "pauseReset", label: "Pause & Reset", points: 5, group: "Family" },
+  { id: "morningReset", label: "Morning Reset Routine", points: 8, group: "Morning" },
+  { id: "planToday", label: "Create Today’s Plan", points: 10, group: "Morning" },
+  { id: "movement", label: "Morning Walk / Movement", points: 10, group: "Morning" },
+
+  { id: "eatIntentional", label: "Eat Intentionally", points: 8, group: "Midday" },
+  { id: "homeReset", label: "15-Minute Home Reset", points: 5, group: "Midday" },
+  { id: "completeProject", label: "Complete One Started Project", points: 10, group: "Midday" },
+
+  { id: "kidConnection", label: "Intentional Kid Connection", points: 8, group: "Evening" },
+  { id: "pauseReset", label: "Pause & Reset", points: 5, group: "Evening" },
+  { id: "eveningReset", label: "Evening Reset / Prep Tomorrow", points: 5, group: "Evening" },
 ];
 
 const BONUS_HABITS = [
@@ -222,18 +220,18 @@ function completionFor(day) {
 
 function getTier(score) {
   if (score.totalPercent >= 109) {
-    return { label: "Overdrive Day", color: "#B8860B", key: "overdrive" };
+    return { label: "Overflow Day", color: "#B8860B", key: "overdrive" };
   }
 
   if (score.corePercent >= 85) {
-    return { label: "Elite Day", color: "#0D5B3E", key: "elite" };
+    return { label: "Complete Day", color: "#0D5B3E", key: "elite" };
   }
 
   if (score.corePercent >= 55) {
-    return { label: "Stable Day", color: "#C9721B", key: "stable" };
+    return { label: "Calm Day", color: "#C9721B", key: "stable" };
   }
 
-  return { label: "Drift Day", color: "#DDA8A4", key: "drift" };
+  return { label: "Scattered Day", color: "#A66A5B", key: "drift" };
 }
 
 function getNextMove(day, score) {
@@ -1068,7 +1066,7 @@ export default function LifeScoreboard() {
               className="rounded-[1.7rem] p-4"
               style={{ backgroundColor: COLORS.intel.card, border: `1px solid ${COLORS.intel.border}` }}
             >
-              <div className="font-black" style={{ color: COLORS.intel.title }}>Pattern Intelligence</div>
+              <div className="font-black" style={{ color: COLORS.intel.title }}>Daily Rhythm</div>
 
               <div
                 className="mt-3 overflow-hidden rounded-3xl"
@@ -1093,7 +1091,7 @@ export default function LifeScoreboard() {
           <NavButton active={tab === "home"} onClick={() => setTab("home")} icon={<Home size={18} />} label="Home" tabKey="home" />
           <NavButton active={tab === "today"} onClick={() => setTab("today")} icon={<Activity size={18} />} label="Today" tabKey="today" />
           <NavButton active={tab === "history"} onClick={() => setTab("history")} icon={<CalendarDays size={18} />} label="History" tabKey="history" />
-          <NavButton active={tab === "insights"} onClick={() => setTab("insights")} icon={<Brain size={18} />} label="Intel" tabKey="insights" />
+          <NavButton active={tab === "insights"} onClick={() => setTab("insights")} icon={<Brain size={18} />} label="Rhythm" tabKey="insights" />
         </div>
       </nav>
     </div>
