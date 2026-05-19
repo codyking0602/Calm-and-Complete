@@ -87,19 +87,19 @@ const MAX_CORE_POINTS = 69;
 const STORAGE_KEY = "calm-complete-v1";
 
 const TIER_MESSAGES = {
-  stable: [
+  Calm Day: [
     "You created calm momentum today. That counts.",
     "A steady day is still a win.",
     "You protected the basics. That is how life gets lighter.",
     "Small structure beats scattered effort.",
   ],
-  elite: [
+  Complete Day: [
     "Separation starts here.",
     "You did more than survive the day. You shaped it.",
     "Confidence comes from kept promises.",
     "This is calm progress turning into proof.",
   ],
-  overdrive: [
+  Overflow Day: [
     "This is what full alignment feels like.",
     "Days like this change trajectories.",
     "You followed through when it would have been easy not to.",
@@ -220,18 +220,18 @@ function completionFor(day) {
 
 function getTier(score) {
   if (score.totalPercent >= 109) {
-    return { label: "Overflow Day", color: "#B8860B", key: "overdrive" };
+    return { label: "Overflow Day", color: "#B8860B", key: "Overflow Day" };
   }
 
   if (score.corePercent >= 85) {
-    return { label: "Complete Day", color: "#0D5B3E", key: "elite" };
+    return { label: "Complete Day", color: "#0D5B3E", key: "Complete Day" };
   }
 
   if (score.corePercent >= 55) {
-    return { label: "Calm Day", color: "#C9721B", key: "stable" };
+    return { label: "Calm Day", color: "#C9721B", key: "Calm Day" };
   }
 
-  return { label: "Scattered Day", color: "#A66A5B", key: "drift" };
+  return { label: "Scattered Day", color: "#A66A5B", key: "Scattered Day" };
 }
 
 function getNextMove(day, score) {
@@ -280,13 +280,13 @@ function monthlyStats(data, targetMonth) {
   );
 
   if (!keys.length) {
-    return { month: targetMonth, avg: 0, drift: 0, stable: 0, elite: 0, overdrive: 0, bestStreak: 0, days: 0 };
+    return { month: targetMonth, avg: 0, Scattered Day: 0, Calm Day: 0, Complete Day: 0, Overflow Day: 0, bestStreak: 0, days: 0 };
   }
 
-  let drift = 0;
-  let stable = 0;
-  let elite = 0;
-  let overdrive = 0;
+  let Scattered Day = 0;
+  let Calm Day = 0;
+  let Complete Day = 0;
+  let Overflow Day = 0;
   let totalPct = 0;
   let currentStreak = 0;
   let bestStreak = 0;
@@ -295,10 +295,10 @@ function monthlyStats(data, targetMonth) {
     const score = completionFor(data[k]);
     totalPct += score.totalPercent;
 
-    if (score.totalPercent >= 109) overdrive += 1;
-    else if (score.corePercent >= 85) elite += 1;
-    else if (score.corePercent >= 55) stable += 1;
-    else drift += 1;
+    if (score.totalPercent >= 109) Overflow Day += 1;
+    else if (score.corePercent >= 85) Complete Day += 1;
+    else if (score.corePercent >= 55) Calm Day += 1;
+    else Scattered Day += 1;
 
     if (score.corePercent >= 55) {
       currentStreak += 1;
@@ -311,10 +311,10 @@ function monthlyStats(data, targetMonth) {
   return {
     month: targetMonth,
     avg: Math.round(totalPct / keys.length),
-    drift,
-    stable,
-    elite,
-    overdrive,
+    Scattered Day,
+    Calm Day,
+    Complete Day,
+    Overflow Day,
     bestStreak,
     days: keys.length,
   };
@@ -327,14 +327,14 @@ function allTimeStats(data) {
     (acc, k) => {
       const score = completionFor(data[k]);
 
-      if (score.totalPercent >= 109) acc.overdrive += 1;
-      else if (score.corePercent >= 85) acc.elite += 1;
-      else if (score.corePercent >= 55) acc.stable += 1;
-      else acc.drift += 1;
+      if (score.totalPercent >= 109) acc.Overflow Day += 1;
+      else if (score.corePercent >= 85) acc.Complete Day += 1;
+      else if (score.corePercent >= 55) acc.Calm Day += 1;
+      else acc.Scattered Day += 1;
 
       return acc;
     },
-    { drift: 0, stable: 0, elite: 0, overdrive: 0 }
+    { Scattered Day: 0, Calm Day: 0, Complete Day: 0, Overflow Day: 0 }
   );
 }
 
@@ -654,7 +654,7 @@ export default function LifeScoreboard() {
 
     return [
       stats.avg < 55
-        ? "Drift Detected: The average is below stable. Lower the chaos before adding more."
+        ? "Scattered Day Detected: The average is below Calm Day. Lower the chaos before adding more."
         : "Pattern Looks Solid: Keep stacking calm, finished days.",
       `Weakest Habit: ${rates[0].label} (${rates[0].rate}%).`,
       `Strongest Habit: ${rates[rates.length - 1].label} (${rates[rates.length - 1].rate}%).`,
@@ -684,7 +684,7 @@ export default function LifeScoreboard() {
 
   function triggerTier(updatedScore) {
     const tier = getTier(updatedScore);
-    if (tier.key === "drift") return;
+    if (tier.key === "Scattered Day") return;
     if (triggeredTiers.includes(tier.key)) return;
 
     setTriggeredTiers((prev) => [...prev, tier.key]);
@@ -821,7 +821,7 @@ export default function LifeScoreboard() {
 
               <div className="mt-5 grid grid-cols-3 gap-2">
                 <Stat label="Current Streak" value={stats.streak} />
-                <Stat label="Stable+ Month" value={thisMonthStats.stable + thisMonthStats.elite + thisMonthStats.overdrive} />
+                <Stat label="Calm Day+ Month" value={thisMonthStats.Calm Day + thisMonthStats.Complete Day + thisMonthStats.Overflow Day} />
                 <Stat label="Month Avg XP" value={`${thisMonthStats.avg}%`} />
               </div>
 
@@ -1039,10 +1039,10 @@ export default function LifeScoreboard() {
             >
               <div className="font-black" style={{ color: COLORS.history.title }}>All-Time Stats</div>
               <div className="mt-3 grid grid-cols-2 gap-2">
-                <Stat label="Drift Days" value={totals.drift} theme="history" />
-                <Stat label="Stable Days" value={totals.stable} theme="history" />
-                <Stat label="Elite Days" value={totals.elite} theme="history" />
-                <Stat label="Overdrive Days" value={totals.overdrive} theme="history" />
+                <Stat label="Scattered Day Days" value={totals.Scattered Day} theme="history" />
+                <Stat label="Calm Day Days" value={totals.Calm Day} theme="history" />
+                <Stat label="Complete Day Days" value={totals.Complete Day} theme="history" />
+                <Stat label="Overflow Day Days" value={totals.Overflow Day} theme="history" />
               </div>
             </section>
 
